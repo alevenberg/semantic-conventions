@@ -19,4 +19,72 @@ For Google Cloud Pub/Sub, the following additional attributes are defined:
 | [`messaging.gcp_pubsub.message.ordering_key`](../attributes-registry/messaging.md) | string | The ordering key for a given message. If the attribute is not present, the message does not have an ordering key. | `ordering_key` | Conditionally Required: If the message type has an ordering key set. |
 <!-- endsemconv -->
 
+
+
+
+```mermaid
+flowchart TD;
+  subgraph CONSUMER
+  direction LR
+  A[Ambient]-- parent -->R1[Receive m1]
+  A-- parent -->SM1[Settle m1]
+  end
+  subgraph PRODUCER
+  direction LR
+  CM1[Create m1]
+  PM1[Publish m1]
+  end
+  CM1-. link .-PM1;
+  CM1-. link .-R1;
+  CM1-. link .-SM1;
+
+  classDef consumer fill:#0560f2
+  class R1 consumer
+  classDef ack fill:#5e04d4
+  class SM1 ack
+  classDef producer fill:green
+  class PM1,CM1 producer
+  classDef additional opacity:0.4
+  class A additional
+  linkStyle 2 color:green,stroke:green
+  linkStyle 3 color:#0560f2,stroke:#0560f2
+  linkStyle 4 color:#5e04d4,stroke:#5e04d4
+```
+
+
+```mermaid
+flowchart TD;
+  subgraph CONSUMER
+  direction LR
+  A[Ambient]-- parent -->RM1[Receive m1]
+  A-- parent -->SM1[Settle m1]
+  A[Ambient]-- parent -->RM2[Receive m2]
+  A-- parent -->SM2[Settle m2]
+  end
+  subgraph PRODUCER
+  direction LR
+  CM1[Create m1]
+  CM2[Create m2]
+  P[Publish]
+  end
+  CM1-. link .-P;
+  CM2-. link .-P;
+  CM1-. link .-RM1;
+  CM1-. link .-SM1;
+  CM2-. link .-RM2;
+  CM2-. link .-SM2;
+
+  classDef ack fill:#5e04d4
+  class SM1,SM2 ack
+  classDef consumer fill:#0560f2
+  class RM1,RM2 consumer
+  classDef producer fill:green
+  class P,CM1,CM2 producer
+  classDef additional opacity:0.4
+  class A additional
+  linkStyle 4,5 color:green,stroke:green
+  linkStyle 7,9 color:#5e04d4,stroke:#5e04d4
+  linkStyle 6,8 color:#0560f2,stroke:#0560f2
+```
+
 [DocumentStatus]: https://github.com/open-telemetry/opentelemetry-specification/tree/v1.26.0/specification/document-status.md
