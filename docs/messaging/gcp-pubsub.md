@@ -20,7 +20,7 @@ For Google Cloud Pub/Sub, the following additional attributes are defined:
 <!-- endsemconv -->
 
 
-
+## a
 
 ```mermaid
 flowchart TD;
@@ -28,6 +28,7 @@ flowchart TD;
   direction LR
   A[Ambient]-- parent -->R1[Receive m1]
   A-- parent -->SM1[Settle m1]
+  R1-. link .-LM1[Lease m1];
   end
   subgraph PRODUCER
   direction LR
@@ -39,18 +40,19 @@ flowchart TD;
   CM1-. link .-SM1;
 
   classDef consumer fill:#0560f2
-  class R1 consumer
+  class R1,LM1 consumer
   classDef ack fill:#5e04d4
   class SM1 ack
   classDef producer fill:green
   class PM1,CM1 producer
   classDef additional opacity:0.4
   class A additional
-  linkStyle 2 color:green,stroke:green
-  linkStyle 3 color:#0560f2,stroke:#0560f2
-  linkStyle 4 color:#5e04d4,stroke:#5e04d4
+  linkStyle 3 color:green,stroke:green
+  linkStyle 2,4 color:#0560f2,stroke:#0560f2
+  linkStyle 5 color:#5e04d4,stroke:#5e04d4
 ```
 
+## b
 
 ```mermaid
 flowchart TD;
@@ -60,6 +62,8 @@ flowchart TD;
   A-- parent -->SM1[Settle m1]
   A[Ambient]-- parent -->RM2[Receive m2]
   A-- parent -->SM2[Settle m2]
+  RM1-. link .-LM1[Lease m1];
+  RM2-. link .-LM2[Lease m2];
   end
   subgraph PRODUCER
   direction LR
@@ -73,18 +77,18 @@ flowchart TD;
   CM1-. link .-SM1;
   CM2-. link .-RM2;
   CM2-. link .-SM2;
-
+  
   classDef ack fill:#5e04d4
   class SM1,SM2 ack
   classDef consumer fill:#0560f2
-  class RM1,RM2 consumer
+  class RM1,RM2,LM1,LM2 consumer
   classDef producer fill:green
   class P,CM1,CM2 producer
   classDef additional opacity:0.4
   class A additional
-  linkStyle 4,5 color:green,stroke:green
-  linkStyle 7,9 color:#5e04d4,stroke:#5e04d4
-  linkStyle 6,8 color:#0560f2,stroke:#0560f2
+  linkStyle 7,6 color:green,stroke:green
+  linkStyle 11,9 color:#5e04d4,stroke:#5e04d4
+  linkStyle 4,5,8,10 color:#0560f2,stroke:#0560f2
 ```
 ## stream
 ```mermaid
