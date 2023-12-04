@@ -85,7 +85,7 @@ flowchart TD;
   SM1[Settle m1]
   LM1[Lease m1]
    RM2[Receive m2]
-  SM1[Settle m2]
+  SM2[Settle m2]
   LM2[Lease m2]  
   %% Link 0 
    A-- parent -->RM1
@@ -127,7 +127,7 @@ CM1-. link .-P;
   %% Style the node and corresponding link
   %% Producer links and nodes
   classDef producer fill:green
-  class PM1,CM1,PM2,CM2 producer
+  class P,CM1,CM2 producer
   linkStyle 7,6 color:green,stroke:green
 
   %% Consumer links and nodes
@@ -190,3 +190,75 @@ flowchart TD;
 ```
 
 [DocumentStatus]: https://github.com/open-telemetry/opentelemetry-specification/tree/v1.26.0/specification/document-status.md
+
+```mermaid
+flowchart LR;
+  subgraph PRODUCER
+  direction TB
+  CA[Span Create A]
+  CB[Span Create B]
+  P[Span Publish]
+  end
+  subgraph CONSUMER1
+  direction TB
+  D1[Span Receive A]
+  end
+  subgraph CONSUMER2
+  direction TB
+  D2[Span Receive B]
+  end
+  CA-. link .-D1;
+  CB-. link .-D2;
+  CA-. link .-P;
+  CB-. link .-P;
+
+  classDef normal fill:green
+  class P,CA,CB,D1,D2 normal
+  linkStyle 0,1,2,3 color:green,stroke:green
+```
+
+
+
+```mermaid
+flowchart TD;
+  subgraph CONSUMER2
+  direction LR
+  RB[Receive B]
+  end
+  subgraph CONSUMER1
+  direction LR
+  RA[Receive A]
+  end
+  subgraph PRODUCER
+  direction LR
+  CA[Create A]
+  CB[Create B]
+  P[Publish]
+  end
+  %% Link 0
+  CA-. link .-P;  
+  %% Link 1
+  CB-. link .-P;
+  %% Link 2
+  CA-. link .-RA;
+  %% Link 3
+  CB-. link .-RB;
+
+  %% Style the nodes and corresponding links
+  %% producer links and nodes
+  classDef producer fill:green
+  class P,CA,CB producer
+  linkStyle 0,1 color:green,stroke:green
+
+  %% consumer1 links and nodes with light blue
+  classDef consumer1 fill:#9eecff,color:black
+  class RA consumer1
+  linkStyle 2 color:#9eecff,stroke:#9eecff
+
+  %% consumer2 links and nodes with dark blue
+  classDef consumer2 fill:#032a61
+  class RB consumer2
+  linkStyle 3 color:#032a61,stroke:#032a61
+```
+
+
