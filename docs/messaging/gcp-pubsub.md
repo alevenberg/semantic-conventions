@@ -324,7 +324,6 @@ flowchart TD;
   subgraph CONSUMER
   direction LR
   A[Ambient]
-  R1[Receive m1]
   SM1[Settle m1]
   LM1[Lease m1]
   %% Link 0
@@ -337,6 +336,7 @@ flowchart TD;
   direction LR
   CM1[Create m1]
   PM1[Publish m1]
+  R1[Receive m1]
   end
   %% Link 3
   CM1-. link .-PM1;
