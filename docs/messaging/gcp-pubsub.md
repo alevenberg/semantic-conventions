@@ -262,3 +262,110 @@ flowchart TD;
 ```
 
 
+
+
+```mermaid
+flowchart TD;
+  subgraph CONSUMER
+  direction LR
+  A[Ambient]
+  R1[Receive m1]
+  SM1[Settle m1]
+  LM1[Lease m1]
+  %% Link 0
+  A-- parent -->R1
+  %% Link 1
+  A-- parent -->SM1
+  %% Link 2
+  A-- parent -->LM1
+  end
+  subgraph PRODUCER
+  direction LR
+  CM1[Create m1]
+  PM1[Publish m1]
+  end
+  %% Link 3
+  CM1-. link .-PM1;
+  %% Link 4
+  CM1-. link .-R1;
+  %% Link 5
+  R1-. link .-SM1;
+  %% Link 6
+  R1-. link .-LM1;
+
+  %% Style the node and corresponding link
+  %% Producer links and nodes
+  classDef producer fill:green
+  class PM1,CM1 producer
+  linkStyle 3 color:green,stroke:green
+
+  %% Consumer links and nodes
+  classDef consumer fill:#032a61
+  class R1 consumer
+  linkStyle 4 color:#032a61,stroke:#032a61
+
+  classDef lease fill:#0560f2
+  class LM1 lease
+  linkStyle 6 color:#0560f2,stroke:#0560f2
+
+  classDef ack fill:#577eb5
+  class SM1 ack
+  linkStyle 5 color:#577eb5,stroke:#577eb5
+
+  classDef additional opacity:0.4
+  class A additional
+```
+
+
+
+
+```mermaid
+flowchart TD;
+  subgraph CONSUMER
+  direction LR
+  A[Ambient]
+  R1[Receive m1]
+  SM1[Settle m1]
+  LM1[Lease m1]
+  %% Link 0
+  %% Link 1
+  A-- parent -->SM1
+  %% Link 2
+  A-- parent -->LM1
+  end
+  subgraph PRODUCER
+  direction LR
+  CM1[Create m1]
+  PM1[Publish m1]
+  end
+  %% Link 3
+  CM1-. link .-PM1;
+  %% Link 4
+  CM1-. link .-R1;
+  %% Link 5
+  CM1-. link .-SM1;
+  %% Link 6
+  CM1-. link .-LM1;
+  CM1-- parent -->R1
+  %% Style the node and corresponding link
+  %% Producer links and nodes
+  classDef producer fill:green
+  class PM1,CM1 producer
+  linkStyle 2 color:green,stroke:green
+
+  %% Consumer links and nodes
+  classDef consumer fill:#032a61
+  class R1 consumer
+  linkStyle 3 color:#032a61,stroke:#032a61
+
+  classDef lease fill:#0560f2
+  class LM1 lease
+  linkStyle 5 color:#0560f2,stroke:#0560f2
+
+  classDef ack fill:#577eb5
+  class SM1 ack
+  linkStyle 4 color:#577eb5,stroke:#577eb5
+
+  classDef additional opacity:0.4
+  class A additional
+```
