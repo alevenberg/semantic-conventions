@@ -74,6 +74,50 @@ flowchart TD;
   class A additional
 ```
 
+```mermaid
+flowchart TD;
+  subgraph CONSUMER
+  direction LR
+  A[Ambient]
+  R1[Receive m1]
+  SM1[Settle m1]
+  %% Link 0
+  A-- parent -->R1
+  %% Link 1
+  A-- parent -->SM1
+  end
+  subgraph PRODUCER
+  direction LR
+  CM1[Create m1]
+  PM1[Publish]
+  end
+  %% Link 2
+  CM1-. link .-PM1;
+  %% Link 3
+  CM1-. link .-R1;
+  %% Link 4
+  CM1-. link .-SM1;
+
+  %% Style the node and corresponding link
+  %% Producer links and nodes
+  classDef producer fill:green
+  class PM1,CM1 producer
+  linkStyle 2 color:green,stroke:green
+
+  %% Consumer links and nodes
+  classDef consumer fill:#032a61
+  class R1 consumer
+  linkStyle 3 color:#032a61,stroke:#032a61
+
+  classDef ack fill:#577eb5
+  class SM1 ack
+  linkStyle 4 color:#577eb5,stroke:#577eb5
+
+  classDef additional opacity:0.4
+  class A additional
+```
+
+
 ## b
 
 ```mermaid
@@ -369,3 +413,259 @@ flowchart TD;
   classDef additional opacity:0.4
   class A additional
 ```
+
+
+
+```mermaid
+flowchart TD;
+  subgraph CONSUMER
+  direction LR
+    A[Ambient]
+  RM1[Receive m1]
+  SM1[Settle m1]
+   RM2[Receive m2]
+  SM2[Settle m2]
+  %% Link 0 
+   A-- parent -->RM1
+  %% Link 1
+   A-- parent -->SM1
+   %% Link 2 
+   A-- parent -->RM2
+   %% Link 3 
+  A-- parent -->SM2
+
+  end
+  subgraph PRODUCER
+  direction LR
+  CM1[Create m1]
+  CM2[Create m2]
+  P[Publish]
+  end
+   %% Link 4
+CM1-. link .-P;
+   %% Link 5 
+  CM2-. link .-P;
+    %% Link 6 
+ CM1-. link .-RM1;
+    %% Link 7
+ CM2-. link .-RM2;
+     %% Link 8
+ CM1-. link .-SM1;
+   %% Link 9
+  CM2-. link .-SM2;
+
+  %% Style the node and corresponding link
+  %% Producer links and nodes
+  classDef producer fill:green
+  class P,CM1,CM2 producer
+  linkStyle 4,5 color:green,stroke:green
+
+  %% Consumer links and nodes
+  classDef consumer fill:#032a61
+  class RM1,RM2 consumer
+  linkStyle 7,6 color:#032a61,stroke:#032a61
+
+  classDef ack fill:#577eb5
+  class SM1,SM2 ack
+  linkStyle 8,9 color:#577eb5,stroke:#577eb5
+
+  classDef additional opacity:0.4
+  class A additional
+```
+
+
+
+```mermaid
+flowchart TD;
+  subgraph CONSUMER
+  direction LR
+  A[Ambient]
+  R1[Receive m1]
+  SM1[Settle m1]
+  %% Link 0
+  A-- parent -->R1
+  %% Link 1
+  A-- parent -->SM1
+  end
+  subgraph PRODUCER
+  direction LR
+  CM1[Create m1]
+  PM1[Publish]
+  end
+  %% Link 2
+  CM1-. link .-PM1;
+  %% Link 3
+  CM1-. link .-R1;
+  %% Link 4
+  R1-. link .-SM1;
+
+  %% Style the node and corresponding link
+  %% Producer links and nodes
+  classDef producer fill:green
+  class PM1,CM1 producer
+  linkStyle 2 color:green,stroke:green
+
+  %% Consumer links and nodes
+  classDef consumer fill:#032a61
+  class R1 consumer
+  linkStyle 3 color:#032a61,stroke:#032a61
+
+  classDef ack fill:#577eb5
+  class SM1 ack
+  linkStyle 4 color:#577eb5,stroke:#577eb5
+
+  classDef additional opacity:0.4
+  class A additional
+```
+
+
+```mermaid
+flowchart TD;
+  subgraph CONSUMER
+  direction LR
+  RM1[Receive m1]
+  SM1[Settle m1]
+   RM2[Receive m2]
+  SM2[Settle m2]
+
+  end
+  subgraph PRODUCER
+  direction LR
+  CM1[Create m1]
+  CM2[Create m2]
+  P[Publish]
+  end
+   %% Link 4 
+CM1-. link .-P;
+   %% Link 5 
+  CM2-. link .-P;
+    %% Link 6 
+ CM1-. link .-RM1;
+    %% Link 7
+ CM2-. link .-RM2;
+     %% Link 8
+ RM1-. link .-SM1;
+   %% Link 9
+  RM2-. link .-SM2;
+
+  %% Style the node and corresponding link
+  %% Producer links and nodes
+  classDef producer fill:green
+  class P,CM1,CM2 producer
+  linkStyle 0,1 color:green,stroke:green
+
+  %% Consumer links and nodes
+  classDef consumer fill:#032a61
+  class RM1,RM2 consumer
+  linkStyle 2,3 color:#032a61,stroke:#032a61
+
+  classDef ack fill:#577eb5
+  class SM1,SM2 ack
+  linkStyle 4,5 color:#577eb5,stroke:#577eb5
+
+```
+
+
+
+```mermaid
+flowchart TD;
+  subgraph CONSUMER
+  direction LR
+ %% A[Ambient]
+  R1[Receive m1]
+  SM1[Settle m1]
+  %% Link 0
+%%  A-- parent -->R1
+  %% Link 1
+ %% A-- parent -->SM1
+  end
+  subgraph PRODUCER
+  direction LR
+  CM1[Create m1]
+  PM1[Publish]
+  end
+  %% Link 2
+  PM1-. link .->CM1;
+  %% Link 3
+  R1-. link .->CM1;
+  %% Link 4
+  SM1-. link .->R1;
+
+  %% Style the node and corresponding link
+  %% Producer links and nodes
+  classDef producer fill:green
+  class PM1,CM1 producer
+  linkStyle 0 color:green,stroke:green
+
+  %% Consumer links and nodes
+  classDef consumer fill:#032a61
+  class R1 consumer
+  linkStyle 1 color:#032a61,stroke:#032a61
+
+  classDef ack fill:#577eb5
+  class SM1 ack
+  linkStyle 2 color:#577eb5,stroke:#577eb5
+
+  classDef additional opacity:0.4
+  class A additional
+```
+
+```mermaid
+flowchart TD
+  subgraph TRACE3
+    MA["Modack (batch)"]
+  end
+
+  subgraph TRACE2
+   A["Ack (batch)"]
+  end
+
+  subgraph TRACE0
+   P["Publish (batch)"]
+  end
+
+
+  subgraph Message trace
+  direction TB
+  
+  subgraph PRODUCER
+  direction LR
+  CM1[Create]
+  end
+
+  subgraph CONSUMER
+  direction LR
+  S[Subscribe]
+  D[Deliver]
+  FC[Flow control]
+  SC[Scheduler]
+  %% Link 0
+  S--parent-->FC;
+  %% Link 1
+  FC--parent-->SC;
+  %% Link 2
+  SC--parent-->D;
+  end
+  end
+
+
+  %% Link 3
+  CM1-. link .-P;
+  %% Link 4
+  S-. link .-MA;
+  %% Link 5
+  S-. link .-A;
+  %% Link 6
+  CM1--parent-->S;
+
+  %% Style the node and corresponding links
+
+  classDef ack fill:#577eb5
+  class A,SC,FC,MA,S ack
+
+  %% semantic convention standard nodes and links
+  classDef semconv fill:#186e07
+  class CM1,P,D semconv
+  linkStyle 3 color:#81d971,stroke:#0f4505
+```
+
