@@ -78,13 +78,9 @@ flowchart TD;
 flowchart TD;
   subgraph CONSUMER
   direction LR
-  A[Ambient]
   R1[Receive m1]
   SM1[Settle m1]
-  %% Link 0
-  A-- parent -->R1
-  %% Link 1
-  A-- parent -->SM1
+  EM1[Extend m1]
   end
   subgraph PRODUCER
   direction LR
@@ -96,25 +92,28 @@ flowchart TD;
   %% Link 3
   CM1-. link .-R1;
   %% Link 4
-  CM1-. link .-SM1;
+  R1-. link .-SM1;
+  R1-. link .-EM1;
 
   %% Style the node and corresponding link
   %% Producer links and nodes
   classDef producer fill:green
   class PM1,CM1 producer
-  linkStyle 2 color:green,stroke:green
+  linkStyle 0 color:green,stroke:green
 
   %% Consumer links and nodes
   classDef consumer fill:#032a61
   class R1 consumer
-  linkStyle 3 color:#032a61,stroke:#032a61
+  linkStyle 1 color:#032a61,stroke:#032a61
 
   classDef ack fill:#577eb5
   class SM1 ack
-  linkStyle 4 color:#577eb5,stroke:#577eb5
+  linkStyle 2 color:#577eb5,stroke:#577eb5
 
-  classDef additional opacity:0.4
-  class A additional
+
+  classDef lease fill:#0560f2
+  class EM1 lease
+  linkStyle 3 color:#0560f2,stroke:#0560f2
 ```
 
 
