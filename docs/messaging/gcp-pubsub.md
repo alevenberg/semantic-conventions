@@ -6,7 +6,7 @@ linkTitle: Google Cloud Pub/Sub
 
 **Status**: [Experimental][DocumentStatus]
 
-The Semantic Conventions for [Google Cloud Pub/Sub](https://cloud.google.com/pubsub) extend and override the [Messaging Semantic Conventions](README.md) that describe common messaging operations attributes in addition to the Semantic Conventions described on this page.
+The Semantic Conventions for [Google Cloud Pub/Sub](https://cloud.google.com/pubsub) Modack and override the [Messaging Semantic Conventions](README.md) that describe common messaging operations attributes in addition to the Semantic Conventions described on this page.
 
 `messaging.system` MUST be set to `"gcp_pubsub"`.
 
@@ -28,7 +28,7 @@ flowchart TD;
   direction LR
   A[Ambient]
   R1[Receive m1]
-  SM1[Settle m1]
+  SM1[Ack m1]
   LM1[Lease m1]
   %% Link 0
   A-- parent -->R1
@@ -79,8 +79,8 @@ flowchart TD;
   subgraph CONSUMER
   direction LR
   R1[Receive m1]
-  SM1[Settle m1]
-  EM1[Extend m1]
+  SM1[Ack m1]
+  EM1[Modack m1]
   end
   subgraph PRODUCER
   direction LR
@@ -125,10 +125,10 @@ flowchart TD;
   direction LR
     A[Ambient]
   RM1[Receive m1]
-  SM1[Settle m1]
+  SM1[Ack m1]
   LM1[Lease m1]
    RM2[Receive m2]
-  SM2[Settle m2]
+  SM2[Ack m2]
   LM2[Lease m2]  
   %% Link 0 
    A-- parent -->RM1
@@ -198,7 +198,7 @@ flowchart TD;
   subgraph CONSUMER
   direction LR
   A[Ambient]-- parent -->RM1[Receive m1 m2]
-  A-- parent -->SM1[Settle m1 m2]
+  A-- parent -->SM1[Ack m1 m2]
   A-- parent -->L[Lease m1 m2]
   end
   subgraph PRODUCER
@@ -313,8 +313,8 @@ flowchart TD;
   direction LR
   A[Ambient]
   R1[Receive m1]
-  SM1[Settle m1]
-  LM1[Extend m1]
+  SM1[Ack m1]
+  LM1[Modack m1]
   %% Link 0
   A-- parent -->R1
   %% Link 1
@@ -367,7 +367,7 @@ flowchart TD;
   subgraph CONSUMER
   direction LR
   A[Ambient]
-  SM1[Settle m1]
+  SM1[Ack m1]
   LM1[Lease m1]
   %% Link 0
   %% Link 1
@@ -421,9 +421,9 @@ flowchart TD;
   direction LR
     A[Ambient]
   RM1[Receive m1]
-  SM1[Settle m1]
+  SM1[Ack m1]
    RM2[Receive m2]
-  SM2[Settle m2]
+  SM2[Ack m2]
   %% Link 0 
    A-- parent -->RM1
   %% Link 1
@@ -480,7 +480,7 @@ flowchart TD;
   direction LR
   A[Ambient]
   R1[Receive m1]
-  SM1[Settle m1]
+  SM1[Ack m1]
   %% Link 0
   A-- parent -->R1
   %% Link 1
@@ -523,11 +523,11 @@ flowchart TD;
   subgraph CONSUMER
   direction LR
   RM1[Receive m1]
-  SM1[Settle m1]
+  SM1[Ack m1]
    RM2[Receive m2]
-  SM2[Settle m2]
-  LM1[Extend m1]
-  LM2[Extend m2]
+  SM2[Ack m2]
+  LM1[Modack m1]
+  LM2[Modack m2]
 
   end
   subgraph PRODUCER
@@ -581,7 +581,7 @@ flowchart TD;
   direction LR
  %% A[Ambient]
   R1[Receive m1]
-  SM1[Settle m1]
+  SM1[Ack m1]
   %% Link 0
 %%  A-- parent -->R1
   %% Link 1
@@ -682,11 +682,11 @@ flowchart TD;
   subgraph CONSUMER
   direction LR
   RM1[Receive m1]
-  SM1[Settle m1]
-  LM1[Extend m1]
+  SM1[Ack m1]
+  LM1[Modack m1]
    RM2[Receive m2]
-  SM2[Settle m2]
-  LM2[Extend m2]  
+  SM2[Ack m2]
+  LM2[Modack m2]  
 
   end
   subgraph PRODUCER
@@ -738,13 +738,13 @@ flowchart TD;
   subgraph CONSUMER
   direction LR
   RM1[Subscribe]
-  SM1[Settle m1]
-  LM1[Extend m1]
+  SM1[Ack m1]
+  LM1[Modack m1]
    RM2[Deliver m2]
    DM1[Deliver m1]
    DM2[Deliver m2]
-  SM2[Settle m2]
-  LM2[Extend m2]  
+  SM2[Ack m2]
+  LM2[Modack m2]  
 
   end
   subgraph PRODUCER
@@ -874,14 +874,14 @@ flowchart TD;
 ```mermaid
 flowchart TD;
   subgraph CONSUMER - TRACE C  
- SETTLE[my-sub settle]
+ Ack[my-sub Ack]
   ACK[ google.pubsub.v1.Subscriber/Acknowledge]
-  SETTLE--parent-->ACK;
+  Ack--parent-->ACK;
   end
   subgraph CONSUMER - TRACE B
- EXTEND[my-sub extend]
-  EXTEND_RPC[google.pubsub.v1.Subscriber/ModifyAckDeadline]
-EXTEND--parent-->EXTEND_RPC;
+ Modack[my-sub Modack]
+  Modack_RPC[google.pubsub.v1.Subscriber/ModifyAckDeadline]
+Modack--parent-->Modack_RPC;
   end
   subgraph CONSUMER - TRACE A
    S[my-sub subscribe]
@@ -898,18 +898,18 @@ D[my-sub deliver]
                             CC--parent-->D;
 
 end
- S-. link .-EXTEND;
- S-. link .-SETTLE;
+ S-. link .-Modack;
+ S-. link .-Ack;
    classDef consumer fill:#467049
   class S,MQ,LM,BS,CC,D consumer
   linkStyle 2,3,4,5,6 color:#467049,stroke:#467049
 
-  classDef extend fill:#2f8235
-  class EXTEND,EXTEND_RPC extend
+  classDef Modack fill:#2f8235
+  class Modack,Modack_RPC Modack
   linkStyle 1,7 color:#2f8235,stroke:#2f8235
 
-     classDef settle fill:#06470b
-  class ACK,SETTLE settle
+     classDef Ack fill:#06470b
+  class ACK,Ack Ack
   linkStyle 0,8 color:#06470b,stroke:#06470b
 ```
 
@@ -934,12 +934,12 @@ flowchart TD;
      BS[subscriber batch source]
              CC[subscriber concurrency control]
 D[my-sub deliver]
- SETTLE[my-sub settle]
+ Ack[my-sub Ack]
   ACK[ google.pubsub.v1.Subscriber/Acknowledge]
-  SETTLE--parent-->ACK;
- EXTEND[my-sub extend]
-  EXTEND_RPC[google.pubsub.v1.Subscriber/ModifyAckDeadline]
-EXTEND--parent-->EXTEND_RPC;
+  Ack--parent-->ACK;
+ Modack[my-sub Modack]
+  Modack_RPC[google.pubsub.v1.Subscriber/ModifyAckDeadline]
+Modack--parent-->Modack_RPC;
   S--parent-->BS;
     BS--parent-->LM;
       LM--parent-->MQ;
@@ -949,8 +949,8 @@ EXTEND--parent-->EXTEND_RPC;
     %% link 9
   C--parent-->B;
   end
- D--parent-->EXTEND;
- D--parent-->SETTLE;
+ D--parent-->Modack;
+ D--parent-->Ack;
  %% link 12
   C-. link .-P;
 
@@ -958,12 +958,12 @@ EXTEND--parent-->EXTEND_RPC;
   class S,MQ,LM,BS,CC,D consumer
   linkStyle 3,4,5,6,7,8 color:#467049,stroke:#467049
 
-  classDef extend fill:#2f8235
-  class EXTEND,EXTEND_RPC extend
+  classDef Modack fill:#2f8235
+  class Modack,Modack_RPC Modack
   linkStyle 0,11 color:#06470b,stroke:#06470b
 
-     classDef settle fill:#06470b
-  class ACK,SETTLE settle
+     classDef Ack fill:#06470b
+  class ACK,Ack Ack
   linkStyle 1,10 color:#2f8235,stroke:#2f8235
 
   classDef producer fill:#577eb5
@@ -983,10 +983,10 @@ EXTEND--parent-->EXTEND_RPC;
 ```mermaid
 flowchart TD;
   subgraph CONSUMER - TRACE C  
- SETTLE[my-sub settle]
+ Ack[my-sub Ack]
   end
   subgraph CONSUMER - TRACE B
- EXTEND[my-sub extend]
+ Modack[my-sub Modack]
   end
   subgraph PRODUCER - TRACE A
    direction RL
@@ -999,18 +999,18 @@ D[my-sub process]
     %% link 9
   end
 
- S-. link .-EXTEND;
- S-. link .-SETTLE;
+ S-. link .-Modack;
+ S-. link .-Ack;
 
    classDef consumer fill:#467049
   class S,MQ,LM,BS,CC,D consumer
   %%linkStyle 0,1 color:#467049,stroke:#467049
 
-  classDef extend fill:#2f8235
-  class EXTEND extend
+  classDef Modack fill:#2f8235
+  class Modack Modack
   %%linkStyle 2 color:#2f8235,stroke:#2f8235
-     classDef settle fill:#06470b
-  class SETTLE settle
+     classDef Ack fill:#06470b
+  class Ack Ack
   %%linkStyle 3 color:#06470b,stroke:#06470b
   linkStyle 0 color:red,stroke:red
 
@@ -1029,10 +1029,10 @@ D[my-sub process]
 ```mermaid
 flowchart TD;
   subgraph CONSUMER - TRACE C  
- SETTLE[my-sub settle]
+ Ack[my-sub Ack]
   end
   subgraph CONSUMER - TRACE B
- EXTEND[my-sub extend]
+ Modack[my-sub Modack]
   end
     subgraph CONSUMER - TRACE A
    direction RL
@@ -1047,18 +1047,18 @@ D[my-sub process]
   end
   C-. link .-S;
 
- S-. link .-EXTEND;
- S-. link .-SETTLE;
+ S-. link .-Modack;
+ S-. link .-Ack;
 
    classDef consumer fill:#467049
   class S,MQ,LM,BS,CC,D consumer
   linkStyle 0,1 color:#467049,stroke:#467049
 
-  classDef extend fill:#2f8235
-  class EXTEND extend
+  classDef Modack fill:#2f8235
+  class Modack Modack
   linkStyle 2 color:#2f8235,stroke:#2f8235
-     classDef settle fill:#06470b
-  class SETTLE settle
+     classDef Ack fill:#06470b
+  class Ack Ack
   linkStyle 3 color:#06470b,stroke:#06470b
 
   classDef producer fill:#577eb5
@@ -1072,13 +1072,13 @@ flowchart TD;
   subgraph CONSUMER
   direction LR
   RM1[Subscribe]
-  SM1[Settle m1]
-  LM1[Extend m1]
+  SM1[Ack m1]
+  LM1[Modack m1]
    RM2[Deliver m2]
    DM1[Deliver m1]
    DM2[Deliver m2]
-  SM2[Settle m2]
-  LM2[Extend m2]  
+  SM2[Ack m2]
+  LM2[Modack m2]  
 
   end
   subgraph PRODUCER
@@ -1149,16 +1149,16 @@ flowchart TD;
 ```mermaid
 flowchart TD;
   subgraph CONSUMER - TRACE E  
- SETTLE1[my-sub settle]
+ Ack1[my-sub Ack]
   end
   subgraph CONSUMER - TRACE D
- EXTEND1[my-sub extend]
+ Modack1[my-sub Modack]
   end
   subgraph CONSUMER - TRACE C  
- SETTLE[my-sub settle]
+ Ack[my-sub Ack]
   end
   subgraph CONSUMER - TRACE B
- EXTEND[my-sub extend]
+ Modack[my-sub Modack]
   end
     subgraph CONSUMER - TRACE A
    direction RL
@@ -1184,20 +1184,20 @@ S[my-sub deliver]
   C-. link .-S;
   C1-. link .-S;
 
- S-. link .-EXTEND;
- S-. link .-EXTEND1;
- S-. link .-SETTLE;
- S-. link .-SETTLE1;
+ S-. link .-Modack;
+ S-. link .-Modack1;
+ S-. link .-Ack;
+ S-. link .-Ack1;
 
    classDef consumer fill:#467049
   class S,MQ,LM,BS,CC,D consumer
   linkStyle 2,3 color:#467049,stroke:#467049
 
-  classDef extend fill:#2f8235
-  class EXTEND,EXTEND1 extend
+  classDef Modack fill:#2f8235
+  class Modack,Modack1 Modack
   linkStyle 4,5 color:#2f8235,stroke:#2f8235
-     classDef settle fill:#06470b
-  class SETTLE,SETTLE1 settle
+     classDef Ack fill:#06470b
+  class Ack,Ack1 Ack
   linkStyle 6,7 color:#06470b,stroke:#06470b
 
   classDef producer fill:#577eb5
@@ -1213,20 +1213,20 @@ S[my-sub deliver]
 ```mermaid
 flowchart TD;
   subgraph CONSUMER - TRACE E  
- SETTLE1[my-sub settle]
+ Ack1[my-sub Ack]
   end
   subgraph CONSUMER - TRACE D
- EXTEND1[my-sub recieve]
- L[my-sub settle]
-  EXTEND1--parent-->L;
+ Modack1[my-sub recieve]
+ L[my-sub Ack]
+  Modack1--parent-->L;
   end
   subgraph CONSUMER - TRACE C  
- SETTLE[my-sub settle]
+ Ack[my-sub Ack]
   end
   subgraph CONSUMER - TRACE B
- EXTEND[my-sub recieve]
- B[my-sub settle]
-  EXTEND--parent-->B;
+ Modack[my-sub recieve]
+ B[my-sub Ack]
+  Modack--parent-->B;
  end
     subgraph CONSUMER - TRACE A
    direction RL
@@ -1251,20 +1251,20 @@ S[my-sub deliver]
   C-. link .-S;
   C1-. link .-S;
 
- S-. link .-EXTEND;
- S-. link .-EXTEND1;
- EXTEND-. link .-SETTLE;
- EXTEND1-. link .-SETTLE1;
+ S-. link .-Modack;
+ S-. link .-Modack1;
+ Modack-. link .-Ack;
+ Modack1-. link .-Ack1;
 
    classDef consumer fill:#467049
   class S,MQ,LM,BS,CC,D consumer
   linkStyle 2,3 color:#467049,stroke:#467049
 
-  classDef extend fill:#2f8235
-  class EXTEND,EXTEND1 extend
+  classDef Modack fill:#2f8235
+  class Modack,Modack1 Modack
   linkStyle 4,5 color:#2f8235,stroke:#2f8235
-     classDef settle fill:#06470b
-  class SETTLE,SETTLE1 settle
+     classDef Ack fill:#06470b
+  class Ack,Ack1 Ack
   linkStyle 6,7 color:#06470b,stroke:#06470b
 
   classDef producer fill:#577eb5
@@ -1283,12 +1283,12 @@ flowchart TD;
      MQ[subscriber flow control]
       CC[subscriber scheduler]
 D[my-sub deliver]
- SETTLE[my-sub settle]
+ Ack[my-sub Ack]
   ACK[ google.pubsub.v1.Subscriber/Acknowledge]
-  SETTLE--parent-->ACK;
- EXTEND[my-sub extend]
-  EXTEND_RPC[google.pubsub.v1.Subscriber/ModifyAckDeadline]
-EXTEND--parent-->EXTEND_RPC;
+  Ack--parent-->ACK;
+ Modack[my-sub Modack]
+  Modack_RPC[google.pubsub.v1.Subscriber/ModifyAckDeadline]
+Modack--parent-->Modack_RPC;
   S--parent-->BS;
     BS--parent-->LM;
       LM--parent-->MQ;
@@ -1296,20 +1296,20 @@ EXTEND--parent-->EXTEND_RPC;
                             CC--parent-->D;
     C--parent-->S;
     %% link 9
- D--parent-->EXTEND;
- D--parent-->SETTLE;
+ D--parent-->Modack;
+ D--parent-->Ack;
  %% link 12
 
    classDef consumer fill:#467049
   class S,MQ,LM,BS,CC,D consumer
  %% linkStyle 3,4,5,6,7,8 color:#467049,stroke:#467049
 
-  classDef extend fill:#2f8235
-  class EXTEND,EXTEND_RPC extend
+  classDef Modack fill:#2f8235
+  class Modack,Modack_RPC Modack
  %% linkStyle 0,11 color:#06470b,stroke:#06470b
 
-     classDef settle fill:#06470b
-  class ACK,SETTLE settle
+     classDef Ack fill:#06470b
+  class ACK,Ack Ack
   %%linkStyle 1,10 color:#2f8235,stroke:#2f8235
 
   classDef producer fill:#577eb5
@@ -1327,31 +1327,31 @@ flowchart TD;
      FC[subscriber flow control]
      SS[subscriber scheduler]
    PS[my-sub process]
- SETTLE[my-sub settle]
+ Ack[my-sub Ack]
   ACK[ google.pubsub.v1.Subscriber/Acknowledge]
-  SETTLE--parent-->ACK;
- EXTEND[my-sub extend]
-  EXTEND_RPC[google.pubsub.v1.Subscriber/ModifyAckDeadline]
-EXTEND--parent-->EXTEND_RPC;
+  Ack--parent-->ACK;
+ Modack[my-sub Modack]
+  Modack_RPC[google.pubsub.v1.Subscriber/ModifyAckDeadline]
+Modack--parent-->Modack_RPC;
   S--parent-->FC;
               FC--parent-->SS;
                        SS--parent-->PS;
     C--parent-->S;
     %% link 9
- PS-. link .-EXTEND;
- PS -. link .-SETTLE;
+ PS-. link .-Modack;
+ PS -. link .-Ack;
  %% link 12
 
    classDef consumer fill:#467049
   class S,PS,FC,SS,CC,D consumer
  %% linkStyle 3,4,5,6,7,8 color:#467049,stroke:#467049
 
-  classDef extend fill:#2f8235
-  class EXTEND,EXTEND_RPC extend
+  classDef Modack fill:#2f8235
+  class Modack,Modack_RPC Modack
  %% linkStyle 0,11 color:#06470b,stroke:#06470b
 
-     classDef settle fill:#06470b
-  class ACK,SETTLE settle
+     classDef Ack fill:#06470b
+  class ACK,Ack Ack
   %%linkStyle 1,10 color:#2f8235,stroke:#2f8235
 
   classDef producer fill:#577eb5
@@ -1365,14 +1365,14 @@ EXTEND--parent-->EXTEND_RPC;
 ```mermaid
 flowchart TD;
   subgraph CONSUMER - TRACE C  
- SETTLE[my-sub settle]
+ Ack[my-sub Ack]
    ACK[google.pubsub.v1.Subscriber/Acknowledge]
-  SETTLE--parent-->ACK;
+  Ack--parent-->ACK;
     end
   subgraph CONSUMER - TRACE B
- EXTEND[my-sub extend]
- EXTEND_RPC[google.pubsub.v1.Subscriber/ModifyAckDeadline] 
-EXTEND--parent-->EXTEND_RPC;
+ Modack[my-sub Modack]
+ Modack_RPC[google.pubsub.v1.Subscriber/ModifyAckDeadline] 
+Modack--parent-->Modack_RPC;
   end
   subgraph PRODUCER - TRACE A
    direction RL
@@ -1386,8 +1386,8 @@ EXTEND--parent-->EXTEND_RPC;
     %% link 9
   end
 
- S-. link .-EXTEND;
- S-. link .-SETTLE;
+ S-. link .-Modack;
+ S-. link .-Ack;
   S--parent-->FC;
               FC--parent-->SS;
                        SS--parent-->D;
@@ -1396,11 +1396,11 @@ EXTEND--parent-->EXTEND_RPC;
   class S,SS,FC,BS,CC,D consumer
    linkStyle 3,4,5,6,7 color:#467049,stroke:#467049
 
-  classDef extend fill:#2f8235
-  class EXTEND,EXTEND_RPC extend
+  classDef Modack fill:#2f8235
+  class Modack,Modack_RPC Modack
   linkStyle 1,3 color:#2f8235,stroke:#2f8235
-     classDef settle fill:#06470b
-  class SETTLE,ACK settle
+     classDef Ack fill:#06470b
+  class Ack,ACK Ack
   linkStyle 0,4 color:#06470b,stroke:#06470b
 
   classDef producer fill:#577eb5
