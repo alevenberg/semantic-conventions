@@ -874,12 +874,12 @@ flowchart TD;
 ```mermaid
 flowchart TD;
   subgraph CONSUMER - TRACE C  
- Ack[my-sub Ack]
+ Ack[my-sub ack]
   ACK[ google.pubsub.v1.Subscriber/Acknowledge]
   Ack--parent-->ACK;
   end
   subgraph CONSUMER - TRACE B
- Modack[my-sub Modack]
+ Modack[my-sub modack]
   Modack_RPC[google.pubsub.v1.Subscriber/ModifyAckDeadline]
 Modack--parent-->Modack_RPC;
   end
@@ -934,10 +934,10 @@ flowchart TD;
      BS[subscriber batch source]
              CC[subscriber concurrency control]
 D[my-sub deliver]
- Ack[my-sub Ack]
+ Ack[my-sub ack]
   ACK[ google.pubsub.v1.Subscriber/Acknowledge]
   Ack--parent-->ACK;
- Modack[my-sub Modack]
+ Modack[my-sub modack]
   Modack_RPC[google.pubsub.v1.Subscriber/ModifyAckDeadline]
 Modack--parent-->Modack_RPC;
   S--parent-->BS;
@@ -983,10 +983,10 @@ Modack--parent-->Modack_RPC;
 ```mermaid
 flowchart TD;
   subgraph CONSUMER - TRACE C  
- Ack[my-sub Ack]
+ Ack[my-sub ack]
   end
   subgraph CONSUMER - TRACE B
- Modack[my-sub Modack]
+ Modack[my-sub modack]
   end
   subgraph PRODUCER - TRACE A
    direction RL
@@ -1023,16 +1023,58 @@ D[my-sub process]
 
 
 
+```mermaid
+flowchart TD;
+  subgraph CONSUMER - TRACE C  
+ Ack[my-sub ack]
+  end
+  subgraph CONSUMER - TRACE B
+ Modack[my-sub modack]
+  end
+  subgraph PRODUCER - TRACE A
+   direction RL
+ C[my-topic create]
+   S[my-sub subscribe]
+D[my-sub process]
+
+    C--parent-->S;
+  S--parent-->D;
+    %% link 9
+  end
+
+ S-. link .-Modack;
+ S-. link .-Ack;
+
+   classDef consumer fill:#467049
+  class S,MQ,LM,BS,CC,D consumer
+  %%linkStyle 0,1 color:#467049,stroke:#467049
+
+  classDef Modack fill:#2f8235
+  class Modack Modack
+  %%linkStyle 2 color:#2f8235,stroke:#2f8235
+     classDef Ack fill:#06470b
+  class Ack Ack
+  %%linkStyle 3 color:#06470b,stroke:#06470b
+  linkStyle 0 color:red,stroke:red
+
+  classDef producer fill:#577eb5
+  class C producer
+
+
+```
+
+
+
 
 
 
 ```mermaid
 flowchart TD;
   subgraph CONSUMER - TRACE C  
- Ack[my-sub Ack]
+ Ack[my-sub ack]
   end
   subgraph CONSUMER - TRACE B
- Modack[my-sub Modack]
+ Modack[my-sub modack]
   end
     subgraph CONSUMER - TRACE A
    direction RL
@@ -1149,16 +1191,16 @@ flowchart TD;
 ```mermaid
 flowchart TD;
   subgraph CONSUMER - TRACE E  
- Ack1[my-sub Ack]
+ Ack1[my-sub ack]
   end
   subgraph CONSUMER - TRACE D
- Modack1[my-sub Modack]
+ Modack1[my-sub modack]
   end
   subgraph CONSUMER - TRACE C  
- Ack[my-sub Ack]
+ Ack[my-sub ack]
   end
   subgraph CONSUMER - TRACE B
- Modack[my-sub Modack]
+ Modack[my-sub modack]
   end
     subgraph CONSUMER - TRACE A
    direction RL
@@ -1213,19 +1255,19 @@ S[my-sub deliver]
 ```mermaid
 flowchart TD;
   subgraph CONSUMER - TRACE E  
- Ack1[my-sub Ack]
+ Ack1[my-sub ack]
   end
   subgraph CONSUMER - TRACE D
  Modack1[my-sub recieve]
- L[my-sub Ack]
+ L[my-sub ack]
   Modack1--parent-->L;
   end
   subgraph CONSUMER - TRACE C  
- Ack[my-sub Ack]
+ Ack[my-sub ack]
   end
   subgraph CONSUMER - TRACE B
  Modack[my-sub recieve]
- B[my-sub Ack]
+ B[my-sub ack]
   Modack--parent-->B;
  end
     subgraph CONSUMER - TRACE A
@@ -1283,10 +1325,10 @@ flowchart TD;
      MQ[subscriber flow control]
       CC[subscriber scheduler]
 D[my-sub deliver]
- Ack[my-sub Ack]
+ Ack[my-sub ack]
   ACK[ google.pubsub.v1.Subscriber/Acknowledge]
   Ack--parent-->ACK;
- Modack[my-sub Modack]
+ Modack[my-sub modack]
   Modack_RPC[google.pubsub.v1.Subscriber/ModifyAckDeadline]
 Modack--parent-->Modack_RPC;
   S--parent-->BS;
@@ -1327,10 +1369,10 @@ flowchart TD;
      FC[subscriber flow control]
      SS[subscriber scheduler]
    PS[my-sub process]
- Ack[my-sub Ack]
+ Ack[my-sub ack]
   ACK[ google.pubsub.v1.Subscriber/Acknowledge]
   Ack--parent-->ACK;
- Modack[my-sub Modack]
+ Modack[my-sub modack]
   Modack_RPC[google.pubsub.v1.Subscriber/ModifyAckDeadline]
 Modack--parent-->Modack_RPC;
   S--parent-->FC;
@@ -1365,12 +1407,12 @@ Modack--parent-->Modack_RPC;
 ```mermaid
 flowchart TD;
   subgraph CONSUMER - TRACE C  
- Ack[my-sub Ack]
+ Ack[my-sub ack]
    ACK[google.pubsub.v1.Subscriber/Acknowledge]
   Ack--parent-->ACK;
     end
   subgraph CONSUMER - TRACE B
- Modack[my-sub Modack]
+ Modack[my-sub modack]
  Modack_RPC[google.pubsub.v1.Subscriber/ModifyAckDeadline] 
 Modack--parent-->Modack_RPC;
   end
